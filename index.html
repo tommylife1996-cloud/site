@@ -2,259 +2,963 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Coin Proje</title>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+  />
+  <title>Coin Analiz Pro TRY</title>
+
   <style>
-    * {
+    * { box-sizing: border-box; }
+
+    :root {
+      --bg: #08101f;
+      --card: rgba(14, 22, 44, 0.92);
+      --card2: rgba(10, 17, 33, 0.95);
+      --line: rgba(148, 163, 184, 0.14);
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --gold: #f6c453;
+      --green: #22c55e;
+      --red: #ef4444;
+      --amber: #f59e0b;
+      --blue: #60a5fa;
+      --shadow: 0 18px 40px rgba(0,0,0,.35);
+    }
+
+    html, body {
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at top left, rgba(246,196,83,.12), transparent 28%),
+        radial-gradient(circle at top right, rgba(96,165,250,.10), transparent 22%),
+        linear-gradient(180deg, #09101e 0%, #0b1020 100%);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
     }
 
     body {
-      background: linear-gradient(135deg, #0f172a, #111827, #1e293b);
-      color: white;
+      padding:
+        max(14px, env(safe-area-inset-top))
+        14px
+        max(18px, env(safe-area-inset-bottom))
+        14px;
     }
 
-    header {
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+    }
+
+    .hero, .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+      margin-bottom: 16px;
+      backdrop-filter: blur(10px);
+    }
+
+    .hero h1 {
+      margin: 0 0 8px;
+      font-size: clamp(30px, 5vw, 44px);
+      line-height: 1.02;
+      letter-spacing: -0.03em;
+    }
+
+    .hero h1 span { color: var(--gold); }
+
+    .sub {
+      color: var(--muted);
+      font-size: 14px;
+      margin: 0;
+      line-height: 1.45;
+    }
+
+    .badges {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 60px;
-      background: rgba(255,255,255,0.03);
-      backdrop-filter: blur(8px);
-      position: sticky;
-      top: 0;
-    }
-
-    .logo {
-      font-size: 28px;
-      font-weight: bold;
-      color: #facc15;
-    }
-
-    nav a {
-      color: white;
-      text-decoration: none;
-      margin-left: 25px;
-      font-size: 16px;
-      transition: 0.3s;
-    }
-
-    nav a:hover {
-      color: #facc15;
-    }
-
-    .hero {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 80px 60px;
-      min-height: 90vh;
-      gap: 40px;
+      gap: 8px;
       flex-wrap: wrap;
+      margin-top: 14px;
     }
 
-    .hero-text {
-      max-width: 600px;
+    .badge {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      color: #dbeafe;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
     }
 
-    .hero-text h1 {
-      font-size: 56px;
-      line-height: 1.2;
-      margin-bottom: 20px;
+    .card h2 {
+      margin: 0 0 14px;
+      font-size: 22px;
     }
 
-    .hero-text h1 span {
-      color: #facc15;
-    }
-
-    .hero-text p {
-      font-size: 20px;
-      color: #d1d5db;
-      margin-bottom: 30px;
-      line-height: 1.6;
-    }
-
-    .buttons a {
-      display: inline-block;
-      padding: 14px 28px;
-      margin-right: 15px;
-      border-radius: 10px;
-      text-decoration: none;
-      font-weight: bold;
-      transition: 0.3s;
-    }
-
-    .btn-primary {
-      background: #facc15;
-      color: #111827;
-    }
-
-    .btn-primary:hover {
-      background: #fde047;
-      transform: translateY(-2px);
-    }
-
-    .btn-secondary {
-      border: 1px solid #facc15;
-      color: #facc15;
-    }
-
-    .btn-secondary:hover {
-      background: #facc15;
-      color: #111827;
-      transform: translateY(-2px);
-    }
-
-    .coin-card {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      padding: 30px;
-      border-radius: 20px;
-      width: 320px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      text-align: center;
-    }
-
-    .coin-circle {
-      width: 140px;
-      height: 140px;
-      border-radius: 50%;
-      margin: 0 auto 20px;
-      background: radial-gradient(circle at top left, #fde68a, #facc15, #ca8a04);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 42px;
-      font-weight: bold;
-      color: #111827;
-      box-shadow: 0 0 30px rgba(250, 204, 21, 0.5);
-    }
-
-    .coin-card h2 {
-      margin-bottom: 10px;
-      color: #facc15;
-    }
-
-    .coin-card p {
-      color: #d1d5db;
-      margin-bottom: 20px;
-    }
-
-    .stats {
+    .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-      padding: 40px 60px 80px;
+      gap: 12px;
+      grid-template-columns: 1fr;
     }
 
-    .stat-box {
-      background: rgba(255,255,255,0.05);
-      padding: 25px;
-      border-radius: 18px;
-      text-align: center;
-      border: 1px solid rgba(255,255,255,0.08);
+    .grid.inputs {
+      grid-template-columns: 1fr;
     }
 
-    .stat-box h3 {
-      font-size: 30px;
-      color: #facc15;
-      margin-bottom: 10px;
+    .stats, .results, .scanner-grid {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(2, 1fr);
     }
 
-    .stat-box p {
-      color: #d1d5db;
-    }
-
-    footer {
-      text-align: center;
-      padding: 25px;
-      color: #9ca3af;
-      border-top: 1px solid rgba(255,255,255,0.08);
-    }
-
-    @media (max-width: 768px) {
-      header {
-        padding: 20px;
-        flex-direction: column;
-        gap: 15px;
-      }
-
-      .hero {
-        padding: 50px 20px;
-      }
-
-      .hero-text h1 {
-        font-size: 38px;
-      }
-
-      .hero-text p {
-        font-size: 17px;
+    @media (min-width: 980px) {
+      .grid.inputs {
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
       }
 
       .stats {
-        padding: 20px 20px 60px;
+        grid-template-columns: repeat(6, 1fr);
+      }
+
+      .results {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .scanner-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #dbeafe;
+    }
+
+    input, select {
+      width: 100%;
+      border: 1px solid rgba(148,163,184,.18);
+      border-radius: 15px;
+      background: #0f172a;
+      color: white;
+      padding: 14px 12px;
+      font-size: 16px;
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    .button-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    button {
+      border: none;
+      border-radius: 15px;
+      padding: 14px 18px;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .primary {
+      background: linear-gradient(135deg, #f6c453, #e7ae2d);
+      color: #1f2937;
+    }
+
+    .secondary {
+      background: rgba(255,255,255,.06);
+      color: white;
+      border: 1px solid var(--line);
+    }
+
+    .ghost {
+      background: #13203e;
+      color: #dbeafe;
+      border: 1px solid var(--line);
+    }
+
+    .stat, .result-box, .summary-box, .scanner-item {
+      background: var(--card2);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 14px;
+      min-width: 0;
+    }
+
+    .stat-title {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: clamp(16px, 4vw, 22px);
+      font-weight: 800;
+      line-height: 1.15;
+      word-break: break-word;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 0;
+      border-bottom: 1px dashed rgba(148,163,184,.10);
+      font-size: 14px;
+    }
+
+    .row:last-child { border-bottom: 0; }
+
+    .good { color: var(--green); font-weight: 800; }
+    .bad { color: var(--red); font-weight: 800; }
+    .neutral { color: var(--amber); font-weight: 800; }
+    .info { color: var(--blue); font-weight: 800; }
+    .loading { color: #cbd5e1; }
+    .error { color: #fca5a5; font-weight: 700; }
+
+    .footer-note {
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    #tvChartWrap {
+      background: var(--card2);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      overflow: hidden;
+      min-height: 520px;
+    }
+
+    .scanner-item {
+      cursor: pointer;
+      transition: transform .15s ease, border-color .15s ease;
+    }
+
+    .scanner-item:hover {
+      transform: translateY(-2px);
+      border-color: rgba(246,196,83,.25);
+    }
+
+    .scanner-title {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+      font-weight: 800;
+    }
+
+    .scanner-meta {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+
+    @media (max-width: 640px) {
+      .results,
+      .scanner-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .row {
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      #tvChartWrap {
+        min-height: 420px;
       }
     }
   </style>
 </head>
 <body>
-
-  <header>
-    <div class="logo">COINX</div>
-    <nav>
-      <a href="#">Ana Sayfa</a>
-      <a href="#">Proje</a>
-      <a href="#">Tokenomics</a>
-      <a href="#">İletişim</a>
-    </nav>
-  </header>
-
-  <section class="hero">
-    <div class="hero-text">
-      <h1>Yeni Nesil <span>Coin Projesi</span></h1>
-      <p>
-        Güçlü topluluk, modern altyapı ve hızlı büyüme hedefiyle geliştirilen
-        coin projemize hoş geldiniz. Geleceğin dijital finans dünyasında yerinizi alın.
+  <div class="container">
+    <section class="hero">
+      <h1>Coin <span>Analiz Pro</span></h1>
+      <p class="sub">
+        TRY / USDT / BTC / ETH pariteleriyle çalışır. Alarm, destek/direnç, öneri coinler ve grafik içerir.
       </p>
-      <div class="buttons">
-        <a href="#" class="btn-primary">Satın Al</a>
-        <a href="#" class="btn-secondary">Whitepaper</a>
+      <div class="badges">
+        <div class="badge">TRY destekli</div>
+        <div class="badge">RSI + EMA + Destek/Direnç</div>
+        <div class="badge">TradingView Chart</div>
+        <div class="badge" id="liveStatus">Veri bekleniyor</div>
       </div>
-    </div>
+    </section>
 
-    <div class="coin-card">
-      <div class="coin-circle">₿</div>
-      <h2>COINX Token</h2>
-      <p>Hızlı, güvenli ve topluluk odaklı dijital varlık.</p>
-      <a href="#" class="btn-primary">Projeyi İncele</a>
-    </div>
-  </section>
+    <section class="card">
+      <h2>Pozisyon ve Coin Seçimi</h2>
+      <div class="grid inputs">
+        <div>
+          <label for="quoteAsset">Parite</label>
+          <select id="quoteAsset">
+            <option value="TRY">TRY</option>
+            <option value="USDT" selected>USDT</option>
+            <option value="BTC">BTC</option>
+            <option value="ETH">ETH</option>
+          </select>
+        </div>
 
-  <section class="stats">
-    <div class="stat-box">
-      <h3>1M+</h3>
-      <p>Toplam Arz</p>
-    </div>
-    <div class="stat-box">
-      <h3>%5</h3>
-      <p>Staking Ödülü</p>
-    </div>
-    <div class="stat-box">
-      <h3>10K+</h3>
-      <p>Topluluk Üyesi</p>
-    </div>
-    <div class="stat-box">
-      <h3>24/7</h3>
-      <p>Kesintisiz Erişim</p>
-    </div>
-  </section>
+        <div>
+          <label for="coinSelect">Coin</label>
+          <select id="coinSelect">
+            <option>Yükleniyor...</option>
+          </select>
+        </div>
 
-  <footer>
-    © 2026 COINX - Tüm hakları saklıdır.
-  </footer>
+        <div>
+          <label for="amount">Adet</label>
+          <input id="amount" type="number" step="0.00000001" value="1" />
+        </div>
 
+        <div>
+          <label for="avgCost">Ortalama Maliyet</label>
+          <input id="avgCost" type="number" step="0.00000001" value="0" />
+        </div>
+
+        <div>
+          <label for="targetPrice">Alarm Fiyatı</label>
+          <input id="targetPrice" type="number" step="0.00000001" value="0" />
+        </div>
+
+        <div>
+          <label for="intervalSelect">Analiz Periyodu</label>
+          <select id="intervalSelect">
+            <option value="15m">15 Dakika</option>
+            <option value="1h" selected>1 Saat</option>
+            <option value="4h">4 Saat</option>
+            <option value="1d">1 Gün</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="button-row">
+        <button class="primary" id="refreshBtn">Analiz Et</button>
+        <button class="secondary" id="saveBtn">Kaydet</button>
+        <button class="ghost" id="scanBtn">Öneri Coinleri Tara</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Öneri Coinler</h2>
+      <div id="scannerSummary" class="summary-box loading">Tarama bekleniyor...</div>
+      <div id="scannerResults" class="scanner-grid"></div>
+      <div class="footer-note">
+        Tarama seçtiğin pariteye göre yapılır. TRY seçersen yalnızca TRY pariteleri listelenir.
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Grafik</h2>
+      <div id="tvChartWrap">
+        <div id="tvChart" style="height:520px;width:100%;"></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Piyasa</h2>
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-title">Sembol</div>
+          <div class="stat-value" id="symbolBox">-</div>
+        </div>
+        <div class="stat">
+          <div class="stat-title">Anlık Fiyat</div>
+          <div class="stat-value" id="priceBox">-</div>
+        </div>
+        <div class="stat">
+          <div class="stat-title">RSI</div>
+          <div class="stat-value" id="rsiBox">-</div>
+        </div>
+        <div class="stat">
+          <div class="stat-title">EMA 20 / 50</div>
+          <div class="stat-value" id="emaBox">-</div>
+        </div>
+        <div class="stat">
+          <div class="stat-title">Destek</div>
+          <div class="stat-value" id="supportBox">-</div>
+        </div>
+        <div class="stat">
+          <div class="stat-title">Direnç</div>
+          <div class="stat-value" id="resistanceBox">-</div>
+        </div>
+      </div>
+      <div class="footer-note" id="timeBox">-</div>
+    </section>
+
+    <section class="card">
+      <h2>Analiz ve Sonuç</h2>
+
+      <div id="summary" class="summary-box loading">Veri bekleniyor...</div>
+
+      <div class="results">
+        <div class="result-box">
+          <h3>Pozisyon</h3>
+          <div id="positionResults"></div>
+        </div>
+        <div class="result-box">
+          <h3>Kâr / Zarar</h3>
+          <div id="pnlResults"></div>
+        </div>
+        <div class="result-box">
+          <h3>Alım / Satım Planı</h3>
+          <div id="signalResults"></div>
+        </div>
+      </div>
+
+      <div class="footer-note">
+        Bu sürüm yalnızca analiz ve alarm verir; emir göndermez.
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const INPUT_KEY = "coinAnalysisTryInputs";
+    const API_BASE = "https://api.binance.com";
+    const RECOMMENDATION_SCAN_LIMIT = 12;
+    let lastAlertFired = false;
+
+    function fmt(n, digits = 2) {
+      return new Intl.NumberFormat("tr-TR", {
+        minimumFractionDigits: digits,
+        maximumFractionDigits: digits
+      }).format(Number(n || 0));
+    }
+
+    function row(label, value, cls = "") {
+      return 
+        <div class="row">
+          <div>${label}</div>
+          <div class="${cls}">${value}</div>
+        </div>
+      ;
+    }
+
+    function moneyClass(v) {
+      return v >= 0 ? "good" : "bad";
+    }
+
+    function saveInputs() {
+      const data = {
+        quoteAsset: document.getElementById("quoteAsset").value,
+        coin: document.getElementById("coinSelect").value,
+        amount: document.getElementById("amount").value,
+        avgCost: document.getElementById("avgCost").value,
+        targetPrice: document.getElementById("targetPrice").value,
+        interval: document.getElementById("intervalSelect").value
+      };
+      localStorage.setItem(INPUT_KEY, JSON.stringify(data));
+      alert("Kaydedildi.");
+    }
+
+    function loadInputs() {
+      const raw = localStorage.getItem(INPUT_KEY);
+      if (!raw) return null;
+      try { return JSON.parse(raw); } catch { return null; }
+    }
+
+    async function fetchSymbols() {
+      const res = await fetch(${API_BASE}/api/v3/exchangeInfo);
+      if (!res.ok) throw new Error("Semboller alınamadı");
+      const json = await res.json();
+      if (!json.symbols) throw new Error("Sembol formatı beklenenden farklı");
+      return json.symbols;
+    }
+
+    async function fetch24h() {
+      const res = await fetch(${API_BASE}/api/v3/ticker/24hr);
+      if (!res.ok) throw new Error("24s veri alınamadı");
+      return await res.json();
+    }
+
+    async function populateCoins() {
+      const quoteAsset = document.getElementById("quoteAsset").value;
+      const select = document.getElementById("coinSelect");
+      select.innerHTML = <option>Yükleniyor...</option>;
+
+      const symbols = await fetchSymbols();
+      const filtered = symbols
+        .filter(s => s.status === "TRADING" && s.quoteAsset === quoteAsset && s.isSpotTradingAllowed)
+        .map(s => s.baseAsset)
+        .filter((v, i, arr) => arr.indexOf(v) === i)
+        .sort((a, b) => a.localeCompare(b));
+
+      select.innerHTML = filtered.map(c => <option value="${c}">${c}</option>).join("");
+
+      const saved = loadInputs();
+      if (saved?.coin && saved?.quoteAsset === quoteAsset && filtered.includes(saved.coin)) {
+        select.value = saved.coin;
+      } else if (filtered.includes("BTC")) {
+        select.value = "BTC";
+      } else if (filtered.length) {
+        select.value = filtered[0];
+      }
+    }
+
+    async function fetchKlines(symbol, interval, limit = 120) {
+      const res = await fetch(${API_BASE}/api/v3/klines?symbol=${symbol}&interval=${interval}&limit=${limit});
+      if (!res.ok) throw new Error("Kline verisi alınamadı");
+      return await res.json();
+    }
+
+    function closesFromKlines(klines) {
+      return klines.map(k => Number(k[4]));
+    }
+
+    function highsFromKlines(klines) {
+      return klines.map(k => Number(k[2]));
+    }
+
+    function lowsFromKlines(klines) {
+      return klines.map(k => Number(k[3]));
+    }
+
+    function ema(values, period) {
+      if (values.length < period) return null;
+      const k = 2 / (period + 1);
+      let emaPrev = values.slice(0, period).reduce((a, b) => a + b, 0) / period;
+      for (let i = period; i < values.length; i++) {
+        emaPrev = values[i] * k + emaPrev * (1 - k);
+      }
+      return emaPrev;
+    }
+
+    function rsi(values, period = 14) {
+      if (values.length < period + 1) return null;
+
+      let gains = 0;
+      let losses = 0;
+
+      for (let i = 1; i <= period; i++) {
+        const diff = values[i] - values[i - 1];
+        if (diff >= 0) gains += diff;
+        else losses += Math.abs(diff);
+      }
+
+      let avgGain = gains / period;
+      let avgLoss = losses / period;
+
+      for (let i = period + 1; i < values.length; i++) {
+        const diff = values[i] - values[i - 1];
+        const gain = diff > 0 ? diff : 0;
+        const loss = diff < 0 ? Math.abs(diff) : 0;
+
+        avgGain = ((avgGain * (period - 1)) + gain) / period;
+        avgLoss = ((avgLoss * (period - 1)) + loss) / period;
+      }
+
+      if (avgLoss === 0) return 100;
+      const rs = avgGain / avgLoss;
+      return 100 - (100 / (1 + rs));
+    }
+
+    function supportResistance(klines) {
+      const highs = highsFromKlines(klines);
+      const lows = lowsFromKlines(klines);
+      const sliceHighs = highs.slice(-30);
+      const sliceLows = lows.slice(-30);
+      return {
+        support: Math.min(...sliceLows),
+        resistance: Math.max(...sliceHighs)
+      };
+    }
+
+    function buildSignal(price, rsiValue, ema20, ema50, support, resistance) {
+      let trend = "Yatay";
+      let signal = "BEKLE";
+      let cls = "neutral";
+      let note = "Net sinyal yok.";
+
+      if (ema20 && ema50) {
+        if (price > ema20 && ema20 > ema50) trend = "Yukarı trend";
+        else if (price < ema20 && ema20 < ema50) trend = "Aşağı trend";
+      }
+
+      if (rsiValue !== null) {
+        if (rsiValue < 30 && price <= support * 1.02) {
+          signal = "GÜÇLÜ AL";
+          cls = "good";
+          note = "RSI düşük ve fiyat destek bölgesinde.";
+        } else if (rsiValue > 70 && price >= resistance * 0.98) {
+          signal = "GÜÇLÜ SAT";
+          cls = "bad";
+          note = "RSI yüksek ve fiyat direnç bölgesinde.";
+        } else if (price > ema20 && ema20 > ema50 && rsiValue >= 45 && rsiValue <= 65) {
+          signal = "AL";
+          cls = "good";
+          note = "Trend yukarı ve momentum dengeli.";
+        } else if (price < ema20 && ema20 < ema50) {
+          signal = "SAT / TEMKİNLİ OL";
+          cls = "bad";
+          note = "Trend aşağı, yapı zayıf.";
+        } else {
+          signal = "BEKLE";
+          cls = "neutral";
+          note = "Daha net kurulum beklenmeli.";
+        }
+      }
+
+      return { trend, signal, cls, note };
+    }
+
+    function scoreCandidate(price, rsiValue, ema20, ema50, support, resistance) {
+      let score = 0;
+      let why = [];
+
+      if (ema20 && ema50 && ema20 > ema50) {
+        score += 2;
+        why.push("EMA20 > EMA50");
+      }
+
+      if (price > ema20) {
+        score += 1;
+        why.push("Fiyat EMA20 üstünde");
+      }
+
+      if (rsiValue >= 45 && rsiValue <= 65) {
+        score += 2;
+        why.push("RSI dengeli");
+      } else if (rsiValue < 30) {
+        score += 1;
+        why.push("RSI aşırı satım");
+      } else if (rsiValue > 72) {
+        score -= 2;
+        why.push("RSI aşırı yüksek");
+      }
+
+      if (price >= support * 1.01 && price <= resistance * 0.97) {
+        score += 1;
+        why.push("Risk/ödül dengeli");
+      }
+
+      if (price >= resistance * 0.99) {
+        score += 1;
+        why.push("Direnç kırılımına yakın");
+      }
+
+      return {
+        score,
+        why: why.join(" • ") || "Standart görünüm"
+      };
+    }
+
+    function maybeTriggerPriceAlarm(currentPrice, targetPrice, symbol) {
+      if (!targetPrice || targetPrice <= 0) {
+        lastAlertFired = false;
+        return;
+      }
+
+      if (currentPrice >= targetPrice && !lastAlertFired) {
+        lastAlertFired = true;
+        alert(🚨 ${symbol} hedef fiyata ulaştı: ${fmt(currentPrice, 6)});
+      }
+
+      if (currentPrice < targetPrice) {
+        lastAlertFired = false;
+      }
+    }
+
+    function loadTradingViewChart() {
+      const coin = document.getElementById("coinSelect").value;
+      const quoteAsset = document.getElementById("quoteAsset").value;
+      const interval = document.getElementById("intervalSelect").value;
+      const intervalMap = {
+        "15m": "15",
+        "1h": "60",
+        "4h": "240",
+        "1d": "D"
+      };
+      const tvInterval = intervalMap[interval] || "60";
+      const symbol = BINANCE:${coin}${quoteAsset};
+
+      const container = document.getElementById("tvChart");
+      container.innerHTML = "";
+
+      const wrap = document.createElement("div");
+      wrap.className = "tradingview-widget-container";
+      wrap.style.height = "520px";
+      wrap.style.width = "100%";
+
+      const widgetDiv = document.createElement("div");
+      widgetDiv.className = "tradingview-widget-container__widget";
+      widgetDiv.style.height = "100%";
+      widgetDiv.style.width = "100%";
+
+      const script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src = "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
+      script.async = true;
+      script.innerHTML = JSON.stringify({
+        autosize: true,
+        symbol,
+        interval: tvInterval,
+        timezone: "Europe/Istanbul",
+        theme: "dark",
+        style: "1",
+        locale: "tr",
+        backgroundColor: "rgba(8, 16, 31, 1)",
+        withdateranges: true,
+        hide_side_toolbar: false,
+        allow_symbol_change: false,
+        save_image: false,
+        studies: [
+          "RSI@tv-basicstudies",
+          "MASimple@tv-basicstudies",
+          "MACD@tv-basicstudies"
+        ],
+        support_host: "https://www.tradingview.com"
+      });
+
+      wrap.appendChild(widgetDiv);
+      wrap.appendChild(script);
+      container.appendChild(wrap);
+    }
+
+    async function refreshData() {
+      const summary = document.getElementById("summary");
+      const positionResults = document.getElementById("positionResults");
+      const pnlResults = document.getElementById("pnlResults");
+      const signalResults = document.getElementById("signalResults");
+      const liveStatus = document.getElementById("liveStatus");
+
+      summary.className = "summary-box loading";
+      summary.textContent = "Veri alınıyor...";
+      liveStatus.textContent = "Veri alınıyor";
+
+      try {
+        const quoteAsset = document.getElementById("quoteAsset").value;
+        const coin = document.getElementById("coinSelect").value;
+        const amount = Number(document.getElementById("amount").value || 0);
+        const avgCost = Number(document.getElementById("avgCost").value || 0);
+        const targetPrice = Number(document.getElementById("targetPrice").value || 0);
+        const interval = document.getElementById("intervalSelect").value;
+
+        const symbol = ${coin}${quoteAsset};
+        const klines = await fetchKlines(symbol, interval, 120);
+
+        const closes = closesFromKlines(klines);
+        const price = closes.at(-1);
+        const ema20 = ema(closes, 20);
+        const ema50 = ema(closes, 50);
+        const rsiValue = rsi(closes, 14);
+        const { support, resistance } = supportResistance(klines);
+        const signalInfo = buildSignal(price, rsiValue, ema20, ema50, support, resistance);
+
+        const currentValue = amount * price;
+        const totalCost = amount * avgCost;
+        const pnl = currentValue - totalCost;
+        const pnlPct = totalCost > 0 ? (pnl / totalCost) * 100 : 0;
+
+        const buyZoneLow = support * 1.00;
+        const buyZoneHigh = support * 1.02;
+        const sellZoneLow = resistance * 0.98;
+        const sellZoneHigh = resistance * 1.00;
+        const stopLoss = support * 0.98;
+        const takeProfit = resistance * 0.98;
+
+        const lastOpenTime = klines.at(-1)[0];
+
+        document.getElementById("symbolBox").textContent = symbol;
+        document.getElementById("priceBox").textContent = ${fmt(price, 6)} ${quoteAsset};
+        document.getElementById("rsiBox").textContent = rsiValue !== null ? fmt(rsiValue, 2) : "-";
+        document.getElementById("emaBox").textContent = ${ema20 ? fmt(ema20, 4) : "-"} / ${ema50 ? fmt(ema50, 4) : "-"};
+        document.getElementById("supportBox").textContent = ${fmt(support, 4)} ${quoteAsset};
+        document.getElementById("resistanceBox").textContent = ${fmt(resistance, 4)} ${quoteAsset};
+        document.getElementById("timeBox").textContent = Son mum açılışı: ${new Date(lastOpenTime).toLocaleString("tr-TR")};
+
+        summary.className = "summary-box";
+        summary.innerHTML =
+          row("<b>Trend</b>", <span class="${signalInfo.cls}">${signalInfo.trend}</span>) +
+          row("<b>Sinyal</b>", <span class="${signalInfo.cls}">${signalInfo.signal}</span>) +
+          row("<b>Not</b>", <span class="info">${signalInfo.note}</span>);
+
+        positionResults.innerHTML =
+          row("Coin", coin) +
+          row("Parite", quoteAsset) +
+          row("Periyot", interval) +
+          row("Adet", fmt(amount, 8)) +
+          row("Ortalama maliyet", ${fmt(avgCost, 6)} ${quoteAsset}) +
+          row("Anlık değer", ${fmt(currentValue, 2)} ${quoteAsset});
+
+        pnlResults.innerHTML =
+          row("Toplam maliyet", ${fmt(totalCost, 2)} ${quoteAsset}) +
+          row("Pozisyon değeri", ${fmt(currentValue, 2)} ${quoteAsset}) +
+          row("Kâr / Zarar", ${fmt(pnl, 2)} ${quoteAsset}, moneyClass(pnl)) +
+          row("K/Z %", %${fmt(pnlPct, 2)}, moneyClass(pnl));
+
+        signalResults.innerHTML =
+          row("Alım bölgesi", ${fmt(buyZoneLow, 4)} - ${fmt(buyZoneHigh, 4)} ${quoteAsset}, "good") +
+          row("Satış bölgesi", ${fmt(sellZoneLow, 4)} - ${fmt(sellZoneHigh, 4)} ${quoteAsset}, "bad") +
+          row("Stop-loss", ${fmt(stopLoss, 4)} ${quoteAsset}, "bad") +
+          row("Take-profit", ${fmt(takeProfit, 4)} ${quoteAsset}, "good") +
+          row("Alarm fiyatı", targetPrice > 0 ? ${fmt(targetPrice, 6)} ${quoteAsset} : "-");
+
+        maybeTriggerPriceAlarm(price, targetPrice, symbol);
+        liveStatus.textContent = "Canlı veri aktif";
+        loadTradingViewChart();
+      } catch (err) {
+        console.error(err);
+        summary.className = "summary-box error";
+        summary.textContent = "Veri alınamadı. Birkaç saniye sonra tekrar dene.";
+        liveStatus.textContent = "Veri hatası";
+      }
+    }
+
+    async function scanRecommendations() {
+      const summary = document.getElementById("scannerSummary");
+      const results = document.getElementById("scannerResults");
+      const quoteAsset = document.getElementById("quoteAsset").value;
+
+      summary.className = "summary-box loading";
+      summary.textContent = "Öneri taraması yapılıyor...";
+      results.innerHTML = "";
+
+      try {
+        const [symbols, tickers] = await Promise.all([fetchSymbols(), fetch24h()]);
+
+        const tradablePairs = new Set(
+          symbols
+            .filter(s => s.status === "TRADING" && s.quoteAsset === quoteAsset && s.isSpotTradingAllowed)
+            .map(s => s.symbol)
+        );
+
+        const candidates = tickers
+          .filter(t => tradablePairs.has(t.symbol))
+          .sort((a, b) => Number(b.quoteVolume || 0) - Number(a.quoteVolume || 0))
+          .slice(0, RECOMMENDATION_SCAN_LIMIT);
+
+        const analyses = await Promise.all(
+          candidates.map(async (t) => {
+            try {
+              const klines = await fetchKlines(t.symbol, "1h", 120);
+              const closes = closesFromKlines(klines);
+              const price = closes.at(-1);
+              const ema20 = ema(closes, 20);
+              const ema50 = ema(closes, 50);
+              const rsiValue = rsi(closes, 14);
+              const { support, resistance } = supportResistance(klines);
+              const signalInfo = buildSignal(price, rsiValue, ema20, ema50, support, resistance);
+              const scoreInfo = scoreCandidate(price, rsiValue, ema20, ema50, support, resistance);
+
+              return {
+                symbol: t.symbol,
+                baseAsset: t.symbol.replace(quoteAsset, ""),
+                price,
+                rsi: rsiValue,
+                support,
+                resistance,
+                signal: signalInfo.signal,
+                signalClass: signalInfo.cls,
+                score: scoreInfo.score,
+                why: scoreInfo.why,
+                changePct: Number(t.priceChangePercent || 0)
+              };
+            } catch {
+              return null;
+            }
+          })
+        );
+
+        const cleaned = analyses
+          .filter(Boolean)
+          .sort((a, b) => b.score - a.score || b.changePct - a.changePct)
+          .slice(0, 8);
+
+        if (!cleaned.length) {
+          summary.className = "summary-box error";
+          summary.textContent = "Tarama sonucu bulunamadı.";
+          return;
+        }
+
+        summary.className = "summary-box";
+        summary.innerHTML =
+          row("<b>Parite</b>", <span class="info">${quoteAsset}</span>) +
+          row("<b>Durum</b>", <span class="info">${cleaned.length} coin öne çıktı</span>);
+
+        results.innerHTML = cleaned.map(item => 
+          <div class="scanner-item" onclick="pickCoin('${item.baseAsset}')">
+            <div class="scanner-title">
+              <span>${item.symbol}</span>
+              <span class="${item.signalClass}">${item.signal}</span>
+            </div>
+            <div class="row">
+              <div>Fiyat</div>
+              <div>${fmt(item.price, 6)} ${quoteAsset}</div>
+            </div>
+            <div class="row">
+              <div>RSI</div>
+              <div>${fmt(item.rsi, 2)}</div>
+            </div>
+            <div class="row">
+              <div>Destek / Direnç</div>
+              <div>${fmt(item.support, 4)} / ${fmt(item.resistance, 4)}</div>
+            </div>
+            <div class="row">
+              <div>24s %</div>
+              <div class="${item.changePct >= 0 ? 'good' : 'bad'}">%${fmt(item.changePct, 2)}</div>
+            </div>
+            <div class="scanner-meta">${item.why}</div>
+          </div>
+        ).join("");
+      } catch (err) {
+        console.error(err);
+        summary.className = "summary-box error";
+        summary.textContent = "Öneri taraması başarısız oldu.";
+      }
+    }
+
+    function pickCoin(baseAsset) {
+      const select = document.getElementById("coinSelect");
+      select.value = baseAsset;
+      refreshData();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    async function init() {
+      const saved = loadInputs();
+      if (saved) {
+        document.getElementById("quoteAsset").value = saved.quoteAsset || "USDT";
+        document.getElementById("amount").value = saved.amount || "1";
+        document.getElementById("avgCost").value = saved.avgCost || "0";
+        document.getElementById("targetPrice").value = saved.targetPrice || "0";
+        document.getElementById("intervalSelect").value = saved.interval || "1h";
+      }
+
+      await populateCoins();
+
+      if (saved?.coin) {
+        document.getElementById("coinSelect").value = saved.coin;
+      }
+
+      await refreshData();
+      await scanRecommendations();
+    }
+
+    document.getElementById("quoteAsset").addEventListener("change", async () => {
+      await populateCoins();
+      await refreshData();
+      await scanRecommendations();
+    });
+
+    document.getElementById("coinSelect").addEventListener("change", refreshData);
+    document.getElementById("intervalSelect").addEventListener("change", refreshData);
+    document.getElementById("refreshBtn").addEventListener("click", refreshData);
+    document.getElementById("saveBtn").addEventListener("click", saveInputs);
+    document.getElementById("scanBtn").addEventListener("click", scanRecommendations);
+
+    init();
+    setInterval(refreshData, 30000);
+    setInterval(scanRecommendations, 180000);
+  </script>
 </body>
 </html>
