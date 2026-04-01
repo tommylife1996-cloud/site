@@ -4,17 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Coin Analiz Pro</title>
-
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #0b1220;
+      background: linear-gradient(180deg, #07111f 0%, #0b1220 100%);
       color: white;
     }
 
     .container {
-      max-width: 1000px;
+      max-width: 1150px;
       margin: auto;
       padding: 20px;
     }
@@ -22,173 +25,402 @@
     h1 {
       text-align: center;
       color: #f6c453;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
+      font-size: 42px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #9ca3af;
+      margin-bottom: 25px;
+      font-size: 15px;
     }
 
     .card {
       background: #111827;
+      border-radius: 18px;
       padding: 20px;
-      border-radius: 15px;
-      margin-top: 20px;
+      margin-top: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
     }
 
     .grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
     }
 
     label {
       display: block;
-      margin-top: 10px;
+      margin-bottom: 8px;
       font-size: 14px;
+      color: #e5e7eb;
+      font-weight: bold;
     }
 
     input, select {
       width: 100%;
       padding: 12px;
-      margin-top: 5px;
-      border-radius: 10px;
+      border-radius: 12px;
       border: none;
       background: #1f2937;
       color: white;
-      box-sizing: border-box;
+      font-size: 15px;
+      outline: none;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 18px;
     }
 
     button {
-      margin-top: 20px;
-      padding: 14px;
-      width: 100%;
+      padding: 14px 18px;
       border: none;
-      border-radius: 10px;
-      background: #f6c453;
-      color: black;
+      border-radius: 12px;
       font-weight: bold;
       cursor: pointer;
-      font-size: 16px;
+      font-size: 15px;
     }
 
-    .result, .stats {
+    .primary {
+      background: #f6c453;
+      color: #111827;
+      flex: 1;
+    }
+
+    .secondary {
+      background: #1d4ed8;
+      color: white;
+    }
+
+    .ghost {
+      background: #374151;
+      color: white;
+    }
+
+    .summary {
       margin-top: 15px;
-      padding: 15px;
+      padding: 16px;
       background: #020617;
-      border-radius: 10px;
+      border-radius: 14px;
+      font-size: 16px;
+      line-height: 1.7;
     }
 
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-top: 12px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 16px;
     }
 
     .box {
       background: #0f172a;
-      border-radius: 10px;
-      padding: 12px;
+      border-radius: 14px;
+      padding: 14px;
+      border: 1px solid rgba(255,255,255,0.05);
     }
 
-    .title {
+    .box-title {
       color: #94a3b8;
       font-size: 13px;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
 
-    .value {
-      font-size: 20px;
+    .box-value {
+      font-size: 22px;
       font-weight: bold;
+      word-break: break-word;
     }
 
-    .good { color: #22c55e; }
-    .bad { color: #ef4444; }
-    .neutral { color: #facc15; }
+    .good {
+      color: #22c55e;
+    }
 
-    @media (max-width: 700px) {
-      .grid, .stats-grid {
+    .bad {
+      color: #ef4444;
+    }
+
+    .neutral {
+      color: #facc15;
+    }
+
+    .info {
+      color: #60a5fa;
+    }
+
+    .small-note {
+      margin-top: 14px;
+      color: #9ca3af;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .section-title {
+      font-size: 22px;
+      margin: 0 0 12px 0;
+      color: #f9fafb;
+    }
+
+    .row-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .row-item {
+      background: #0b1324;
+      border-radius: 12px;
+      padding: 12px 14px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .row-item span:first-child {
+      color: #94a3b8;
+    }
+
+    .row-item span:last-child {
+      font-weight: bold;
+      text-align: right;
+    }
+
+    .chart-wrap {
+      background: #0b1324;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.05);
+      min-height: 520px;
+    }
+
+    #tvChart {
+      width: 100%;
+      height: 520px;
+    }
+
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .grid {
         grid-template-columns: 1fr;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .row-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .row-item span:last-child {
+        text-align: left;
+      }
+
+      h1 {
+        font-size: 32px;
+      }
+
+      #tvChart {
+        height: 420px;
+      }
+
+      .chart-wrap {
+        min-height: 420px;
       }
     }
   </style>
 </head>
-
 <body>
   <div class="container">
     <h1>Coin Analiz Pro</h1>
+    <div class="subtitle">Canlı fiyat, teknik analiz, hedef tahmini ve grafik</div>
 
     <div class="card">
       <div class="grid">
         <div>
-          <label>Coin</label>
+          <label for="coin">Coin</label>
           <input id="coin" value="BTC">
         </div>
 
         <div>
-          <label>Parite</label>
+          <label for="pair">Parite</label>
           <select id="pair">
             <option value="USDT">USDT</option>
             <option value="TRY" selected>TRY</option>
+            <option value="BTC">BTC</option>
+            <option value="ETH">ETH</option>
           </select>
         </div>
 
         <div>
-          <label>Adet</label>
-          <input id="amount" type="number" value="1">
+          <label for="interval">Periyot</label>
+          <select id="interval">
+            <option value="15m">15 Dakika</option>
+            <option value="1h" selected>1 Saat</option>
+            <option value="4h">4 Saat</option>
+            <option value="1d">1 Gün</option>
+          </select>
         </div>
 
         <div>
-          <label>Ortalama Maliyet</label>
-          <input id="cost" type="number" value="0">
+          <label for="amount">Adet</label>
+          <input id="amount" type="number" step="0.00000001" value="1">
+        </div>
+
+        <div>
+          <label for="cost">Ortalama Maliyet</label>
+          <input id="cost" type="number" step="0.00000001" value="0">
         </div>
       </div>
 
-      <button onclick="analyze()">Analiz Et</button>
+      <div class="btn-row">
+        <button class="primary" onclick="analyze()">Analiz Et</button>
+        <button class="secondary" onclick="saveData()">Kaydet</button>
+        <button class="ghost" onclick="loadSavedData()">Yükle</button>
+      </div>
 
-      <div class="result" id="result">Veri bekleniyor...</div>
+      <div class="summary" id="summaryBox">Veri bekleniyor...</div>
+      <div class="small-note" id="updateTime">-</div>
+    </div>
 
-      <div class="stats" id="stats" style="display:none;">
-        <div class="stats-grid">
-          <div class="box">
-            <div class="title">Anlık Fiyat</div>
-            <div class="value" id="priceBox">-</div>
-          </div>
-          <div class="box">
-            <div class="title">Toplam Değer</div>
-            <div class="value" id="valueBox">-</div>
-          </div>
-          <div class="box">
-            <div class="title">Kâr / Zarar</div>
-            <div class="value" id="pnlBox">-</div>
-          </div>
-          <div class="box">
-            <div class="title">RSI</div>
-            <div class="value" id="rsiBox">-</div>
-          </div>
-          <div class="box">
-            <div class="title">EMA 20</div>
-            <div class="value" id="ema20Box">-</div>
-          </div>
-          <div class="box">
-            <div class="title">EMA 50</div>
-            <div class="value" id="ema50Box">-</div>
-          </div>
-          <div class="box">
-            <div class="title">Trend</div>
-            <div class="value" id="trendBox">-</div>
-          </div>
-          <div class="box">
-            <div class="title">Sinyal</div>
-            <div class="value" id="signalBox">-</div>
-          </div>
+    <div class="card">
+      <h2 class="section-title">Grafik</h2>
+      <div class="chart-wrap">
+        <div id="tvChart"></div>
+      </div>
+      <div class="small-note">
+        Grafik TradingView üzerinden gösterilir. Coin veya periyot değiştiğinde grafik de güncellenir.
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 class="section-title">Genel Görünüm</h2>
+      <div class="stats-grid">
+        <div class="box">
+          <div class="box-title">Sembol</div>
+          <div class="box-value" id="symbolBox">-</div>
+        </div>
+
+        <div class="box">
+          <div class="box-title">Anlık Fiyat</div>
+          <div class="box-value" id="priceBox">-</div>
+        </div>
+
+        <div class="box">
+          <div class="box-title">Toplam Değer</div>
+          <div class="box-value" id="valueBox">-</div>
+        </div>
+
+        <div class="box">
+          <div class="box-title">Kâr / Zarar</div>
+          <div class="box-value" id="pnlBox">-</div>
+        </div>
+
+        <div class="box">
+          <div class="box-title">RSI</div>
+          <div class="box-value" id="rsiBox">-</div>
+        </div>
+
+        <div class="box">
+          <div class="box-title">EMA 20</div>
+          <div class="box-value" id="ema20Box">-</div>
+        </div>
+
+        <div class="box">
+          <div class="box-title">EMA 50</div>
+          <div class="box-value" id="ema50Box">-</div>
+        </div>
+
+        <div class="box">
+          <div class="box-title">Trend</div>
+          <div class="box-value" id="trendBox">-</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 class="section-title">Plan ve Tahmin</h2>
+      <div class="row-list">
+        <div class="row-item">
+          <span>Sinyal</span>
+          <span id="signalBox">-</span>
+        </div>
+
+        <div class="row-item">
+          <span>Destek</span>
+          <span id="supportBox">-</span>
+        </div>
+
+        <div class="row-item">
+          <span>Direnç</span>
+          <span id="resistanceBox">-</span>
+        </div>
+
+        <div class="row-item">
+          <span>Stop Loss</span>
+          <span id="stopBox">-</span>
+        </div>
+
+        <div class="row-item">
+          <span>Take Profit</span>
+          <span id="takeBox">-</span>
+        </div>
+
+        <div class="row-item">
+          <span>Olası Yukarı Hedef</span>
+          <span id="targetUpBox">-</span>
+        </div>
+
+        <div class="row-item">
+          <span>Olası Aşağı Risk</span>
+          <span id="targetDownBox">-</span>
+        </div>
+
+        <div class="row-item">
+          <span>Risk / Ödül Yorumu</span>
+          <span id="rrBox">-</span>
         </div>
       </div>
     </div>
   </div>
 
   <script>
+    const STORAGE_KEY = "coin_analiz_pro_data";
+
+    function formatNumber(num, digits = 4) {
+      if (num === null || num === undefined || isNaN(num)) return "-";
+      return Number(num).toLocaleString("tr-TR", {
+        minimumFractionDigits: digits,
+        maximumFractionDigits: digits
+      });
+    }
+
+    function formatMoney(num, pair, digits = 4) {
+      if (num === null || num === undefined || isNaN(num)) return "-";
+      return `${formatNumber(num, digits)} ${pair}`;
+    }
+
     function ema(values, period) {
       if (values.length < period) return null;
       const k = 2 / (period + 1);
       let emaPrev = values.slice(0, period).reduce((a, b) => a + b, 0) / period;
+
       for (let i = period; i < values.length; i++) {
         emaPrev = values[i] * k + emaPrev * (1 - k);
       }
@@ -224,51 +456,156 @@
       return 100 - (100 / (1 + rs));
     }
 
-    function signalText(price, ema20, ema50, rsiValue) {
-      if (!ema20 || !ema50 || !rsiValue) {
-        return { trend: "Yetersiz veri", signal: "Bekle", cls: "neutral" };
+    function getSignal(price, ema20, ema50, rsiValue) {
+      if (!ema20 || !ema50 || rsiValue === null) {
+        return { trend: "Yetersiz veri", signal: "BEKLE", className: "neutral" };
       }
 
-      if (price > ema20 && ema20 > ema50 && rsiValue >= 45 && rsiValue <= 65) {
-        return { trend: "Yukarı", signal: "AL", cls: "good" };
+      if (price > ema20 && ema20 > ema50 && rsiValue >= 45 && rsiValue <= 68) {
+        return { trend: "Yukarı trend", signal: "AL", className: "good" };
       }
 
-      if (price < ema20 && ema20 < ema50) {
-        return { trend: "Aşağı", signal: "SAT", cls: "bad" };
+      if (price < ema20 && ema20 < ema50 && rsiValue <= 55) {
+        return { trend: "Aşağı trend", signal: "SAT", className: "bad" };
       }
 
       if (rsiValue > 70) {
-        return { trend: "Aşırı Alım", signal: "Dikkat", cls: "bad" };
+        return { trend: "Aşırı alım", signal: "DİKKAT", className: "bad" };
       }
 
       if (rsiValue < 30) {
-        return { trend: "Aşırı Satım", signal: "Takip Et", cls: "good" };
+        return { trend: "Aşırı satım", signal: "TAKİP ET", className: "good" };
       }
 
-      return { trend: "Kararsız", signal: "BEKLE", cls: "neutral" };
+      return { trend: "Kararsız", signal: "BEKLE", className: "neutral" };
+    }
+
+    function setText(id, text, className = "") {
+      const el = document.getElementById(id);
+      el.textContent = text;
+      el.className = className ? `box-value ${className}` : "box-value";
+    }
+
+    function setInlineText(id, text, className = "") {
+      const el = document.getElementById(id);
+      el.textContent = text;
+      el.className = className;
+    }
+
+    function saveData() {
+      const data = {
+        coin: document.getElementById("coin").value,
+        pair: document.getElementById("pair").value,
+        amount: document.getElementById("amount").value,
+        cost: document.getElementById("cost").value,
+        interval: document.getElementById("interval").value
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      alert("Veriler kaydedildi.");
+    }
+
+    function loadSavedData() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) {
+        alert("Kayıtlı veri bulunamadı.");
+        return;
+      }
+
+      try {
+        const data = JSON.parse(raw);
+        document.getElementById("coin").value = data.coin || "BTC";
+        document.getElementById("pair").value = data.pair || "TRY";
+        document.getElementById("amount").value = data.amount || "1";
+        document.getElementById("cost").value = data.cost || "0";
+        document.getElementById("interval").value = data.interval || "1h";
+        analyze();
+      } catch (e) {
+        alert("Kayıtlı veri okunamadı.");
+      }
+    }
+
+    function loadTradingViewChart(symbol, interval) {
+      const map = {
+        "15m": "15",
+        "1h": "60",
+        "4h": "240",
+        "1d": "D"
+      };
+
+      const tvInterval = map[interval] || "60";
+      const chartEl = document.getElementById("tvChart");
+      chartEl.innerHTML = "";
+
+      const wrap = document.createElement("div");
+      wrap.className = "tradingview-widget-container";
+      wrap.style.height = "100%";
+      wrap.style.width = "100%";
+
+      const widget = document.createElement("div");
+      widget.className = "tradingview-widget-container__widget";
+      widget.style.height = "100%";
+      widget.style.width = "100%";
+
+      const script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src = "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
+      script.async = true;
+      script.innerHTML = JSON.stringify({
+        autosize: true,
+        symbol: `BINANCE:${symbol}`,
+        interval: tvInterval,
+        timezone: "Europe/Istanbul",
+        theme: "dark",
+        style: "1",
+        locale: "tr",
+        backgroundColor: "#0b1324",
+        allow_symbol_change: false,
+        hide_side_toolbar: false,
+        withdateranges: true,
+        studies: [
+          "RSI@tv-basicstudies",
+          "MACD@tv-basicstudies"
+        ],
+        support_host: "https://www.tradingview.com"
+      });
+
+      wrap.appendChild(widget);
+      wrap.appendChild(script);
+      chartEl.appendChild(wrap);
     }
 
     async function analyze() {
       const coin = document.getElementById("coin").value.toUpperCase().trim();
       const pair = document.getElementById("pair").value;
-      const amount = Number(document.getElementById("amount").value);
-      const cost = Number(document.getElementById("cost").value);
+      const interval = document.getElementById("interval").value;
+      const amount = Number(document.getElementById("amount").value || 0);
+      const cost = Number(document.getElementById("cost").value || 0);
       const symbol = coin + pair;
+
+      const summaryBox = document.getElementById("summaryBox");
+      summaryBox.textContent = "Veri alınıyor...";
 
       try {
         const priceRes = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${symbol}`);
         const priceData = await priceRes.json();
 
         if (!priceData.price) {
-          document.getElementById("result").innerText = "Geçersiz coin veya parite";
-          document.getElementById("stats").style.display = "none";
+          summaryBox.textContent = "Geçersiz coin veya parite.";
           return;
         }
 
-        const klineRes = await fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=1h&limit=120`);
+        const klineRes = await fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${interval}&limit=120`);
         const klineData = await klineRes.json();
 
-        const closes = klineData.map(k => Number(k[4]));
+        if (!Array.isArray(klineData) || !klineData.length) {
+          summaryBox.textContent = "Mum verisi alınamadı.";
+          return;
+        }
+
+        const closes = klineData.map(item => Number(item[4]));
+        const highs = klineData.map(item => Number(item[2]));
+        const lows = klineData.map(item => Number(item[3]));
+
         const price = Number(priceData.price);
         const totalValue = price * amount;
         const totalCost = cost * amount;
@@ -277,40 +614,92 @@
         const ema20 = ema(closes, 20);
         const ema50 = ema(closes, 50);
         const rsiValue = rsi(closes, 14);
-        const analysis = signalText(price, ema20, ema50, rsiValue);
 
-        document.getElementById("result").innerHTML = `
-          <b>${symbol}</b> için analiz tamamlandı.
-        `;
+        const recentHighs = highs.slice(-30);
+        const recentLows = lows.slice(-30);
+        const support = Math.min(...recentLows);
+        const resistance = Math.max(...recentHighs);
 
-        document.getElementById("stats").style.display = "block";
+        const stopLoss = support * 0.98;
+        const takeProfit = resistance * 0.98;
 
-        document.getElementById("priceBox").innerText = `${price.toFixed(4)} ${pair}`;
-        document.getElementById("valueBox").innerText = `${totalValue.toFixed(2)} ${pair}`;
+        let targetUp = null;
+        let targetDown = null;
 
-        const pnlBox = document.getElementById("pnlBox");
-        pnlBox.innerText = `${pnl.toFixed(2)} ${pair}`;
-        pnlBox.className = `value ${pnl >= 0 ? 'good' : 'bad'}`;
+        if (ema20 && ema50) {
+          if (price > ema20 && ema20 > ema50) {
+            targetUp = resistance * 1.05;
+          } else {
+            targetUp = resistance * 1.02;
+          }
 
-        document.getElementById("rsiBox").innerText = rsiValue ? rsiValue.toFixed(2) : "-";
-        document.getElementById("ema20Box").innerText = ema20 ? ema20.toFixed(4) : "-";
-        document.getElementById("ema50Box").innerText = ema50 ? ema50.toFixed(4) : "-";
+          if (price < ema20 && ema20 < ema50) {
+            targetDown = support * 0.95;
+          } else {
+            targetDown = support * 0.98;
+          }
+        }
 
-        const trendBox = document.getElementById("trendBox");
-        trendBox.innerText = analysis.trend;
-        trendBox.className = `value ${analysis.cls}`;
+        const analysis = getSignal(price, ema20, ema50, rsiValue);
 
-        const signalBox = document.getElementById("signalBox");
-        signalBox.innerText = analysis.signal;
-        signalBox.className = `value ${analysis.cls}`;
+        let rrText = "Nötr";
+        let rrClass = "neutral";
 
-      } catch (e) {
-        document.getElementById("result").innerText = "Veri alınamadı";
-        document.getElementById("stats").style.display = "none";
+        if (targetUp && targetDown) {
+          const upside = ((targetUp - price) / price) * 100;
+          const downside = ((price - targetDown) / price) * 100;
+
+          if (upside > downside) {
+            rrText = `Ödül daha güçlü (%${upside.toFixed(2)} / -%${downside.toFixed(2)})`;
+            rrClass = "good";
+          } else if (downside > upside) {
+            rrText = `Risk daha yüksek (-%${downside.toFixed(2)} / +%${upside.toFixed(2)})`;
+            rrClass = "bad";
+          } else {
+            rrText = `Dengeli (+%${upside.toFixed(2)} / -%${downside.toFixed(2)})`;
+            rrClass = "neutral";
+          }
+        }
+
+        summaryBox.innerHTML =
+          `<b>${symbol}</b> analiz tamamlandı.<br>` +
+          `Periyot: <b>${interval}</b><br>` +
+          `Trend: <span class="${analysis.className}"><b>${analysis.trend}</b></span><br>` +
+          `Sinyal: <span class="${analysis.className}"><b>${analysis.signal}</b></span>`;
+
+        setText("symbolBox", symbol);
+        setText("priceBox", formatMoney(price, pair, 4));
+        setText("valueBox", formatMoney(totalValue, pair, 2));
+        setText("pnlBox", formatMoney(pnl, pair, 2), pnl >= 0 ? "good" : "bad");
+        setText("rsiBox", rsiValue !== null ? formatNumber(rsiValue, 2) : "-", rsiValue > 70 ? "bad" : rsiValue < 30 ? "good" : "neutral");
+        setText("ema20Box", ema20 !== null ? formatMoney(ema20, pair, 4) : "-");
+        setText("ema50Box", ema50 !== null ? formatMoney(ema50, pair, 4) : "-");
+        setText("trendBox", analysis.trend, analysis.className);
+
+        setInlineText("signalBox", analysis.signal, analysis.className);
+        setInlineText("supportBox", formatMoney(support, pair, 4), "info");
+        setInlineText("resistanceBox", formatMoney(resistance, pair, 4), "info");
+        setInlineText("stopBox", formatMoney(stopLoss, pair, 4), "bad");
+        setInlineText("takeBox", formatMoney(takeProfit, pair, 4), "good");
+        setInlineText("targetUpBox", targetUp ? formatMoney(targetUp, pair, 4) : "-", "good");
+        setInlineText("targetDownBox", targetDown ? formatMoney(targetDown, pair, 4) : "-", "bad");
+        setInlineText("rrBox", rrText, rrClass);
+
+        document.getElementById("updateTime").textContent =
+          "Son güncelleme: " + new Date().toLocaleString("tr-TR");
+
+        loadTradingViewChart(symbol, interval);
+      } catch (error) {
+        summaryBox.textContent = "Veri alınamadı. Coin adı veya pariteyi kontrol et.";
       }
     }
 
+    document.getElementById("coin").addEventListener("change", analyze);
+    document.getElementById("pair").addEventListener("change", analyze);
+    document.getElementById("interval").addEventListener("change", analyze);
+
     analyze();
+    setInterval(analyze, 30000);
   </script>
 </body>
 </html>
