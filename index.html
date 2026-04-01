@@ -5,8 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Coin Analiz Pro</title>
 
-  <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#07111f" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="CoinPro" />
+
+  <link rel="manifest" href="manifest.json" />
   <link rel="icon" href="icon-192.svg" type="image/svg+xml" />
 
   <style>
@@ -104,7 +108,7 @@
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(6, 1fr);
+      grid-template-columns: repeat(7, 1fr);
       gap: 14px;
     }
 
@@ -446,8 +450,13 @@
         </div>
 
         <div>
-          <label for="alarmPrice">Alarm Fiyatı</label>
-          <input id="alarmPrice" type="number" step="0.00000001" value="0" />
+          <label for="upAlarmPrice">Yukarı Alarm</label>
+          <input id="upAlarmPrice" type="number" step="0.00000001" value="0" />
+        </div>
+
+        <div>
+          <label for="downAlarmPrice">Aşağı Alarm</label>
+          <input id="downAlarmPrice" type="number" step="0.00000001" value="0" />
         </div>
       </div>
 
@@ -514,17 +523,22 @@
         <div class="row-item"><span>Olası Yukarı Hedef</span><span id="targetUpBox">-</span></div>
         <div class="row-item"><span>Olası Aşağı Risk</span><span id="targetDownBox">-</span></div>
         <div class="row-item"><span>Risk / Ödül Yorumu</span><span id="rrBox">-</span></div>
-        <div class="row-item"><span>Alarm Durumu</span><span id="alarmStatusBox">-</span></div>
+        <div class="row-item"><span>Yukarı Alarm</span><span id="upAlarmStatusBox">-</span></div>
+        <div class="row-item"><span>Aşağı Alarm</span><span id="downAlarmStatusBox">-</span></div>
+        <div class="row-item"><span>Sinyal Bildirimi</span><span id="signalAlertStatusBox">-</span></div>
       </div>
     </div>
   </div>
 
   <script>
-    const STORAGE_KEY = "coin_analiz_pro_data_v2";
+    const STORAGE_KEY = "coin_analiz_pro_data_v3";
     const API_BASE = "https://api.binance.com";
     const SCAN_LIMIT = 35;
     const SCAN_TOP = 10;
-    let alarmTriggered = false;
+
+    let upAlarmTriggered = false;
+    let downAlarmTriggered = false;
+    let lastSignalDecision = null;
 
     function formatNumber(num, digits = 4) {
       if (num === null || num === undefined || isNaN(num)) return "-";
@@ -765,7 +779,8 @@
         amount: document.getElementById("amount").value,
         cost: document.getElementById("cost").value,
         interval: document.getElementById("interval").value,
-        alarmPrice: document.getElementById("alarmPrice").value
+        upAlarmPrice: document.getElementById("upAlarmPrice").value,
+        downAlarmPrice: document.getElementById("downAlarmPrice").value
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
       alert("Veriler kaydedildi.");
@@ -784,7 +799,8 @@
         document.getElementById("amount").value = data.amount || "1";
         document.getElementById("cost").value = data.cost || "0";
         document.getElementById("interval").value = data.interval || "1h";
-        document.getElementById("alarmPrice").value = data.alarmPrice || "0";
+        document.getElementById("upAlarmPrice").value = data.upAlarmPrice || "0";
+        document.getElementById("downAlarmPrice").value = data.downAlarmPrice || "0";
         analyze();
       } catch {
         alert("Kayıtlı veri okunamadı.");
@@ -806,40 +822,84 @@
 
     async function notifyUser(title, body) {
       if (!("Notification" in window) || Notification.permission !== "granted") return;
+
+      if (navigator.vibrate) {
+        navigator.vibrate([200, 100, 200]);
+      }
+
       if (navigator.serviceWorker && navigator.serviceWorker.ready) {
         const reg = await navigator.serviceWorker.ready;
         reg.showNotification(title, {
           body,
           icon: "icon-192.svg",
-          badge: "icon-192.svg"
+          badge: "icon-192.svg",
+          tag: "coin-analiz-alert",
+          renotify: true
         });
       } else {
         new Notification(title, { body });
       }
     }
 
-    function checkAlarm(currentPrice, alarmPrice, symbol, pair) {
-      const alarmStatusBox = document.getElementById("alarmStatusBox");
+    function checkPriceAlerts(currentPrice, upAlarmPrice, downAlarmPrice, symbol, pair) {
+      const upBox = document.getElementById("upAlarmStatusBox");
+      const downBox = document.getElementById("downAlarmStatusBox");
 
-      if (!alarmPrice || alarmPrice <= 0) {
-        alarmTriggered = false;
-        alarmStatusBox.textContent = "Alarm kapalı";
-        alarmStatusBox.className = "neutral";
+      if (!upAlarmPrice || upAlarmPrice <= 0) {
+        upAlarmTriggered = false;
+        upBox.textContent = "Kapalı";
+        upBox.className = "neutral";
+      } else if (currentPrice >= upAlarmPrice && !upAlarmTriggered) {
+        upAlarmTriggered = true;
+        upBox.textContent = `ÇALDI (${formatMoney(currentPrice, pair, 4)})`;
+        upBox.className = "good";
+        notifyUser("Yukarı Alarm", `${symbol} yukarı hedefe ulaştı: ${formatMoney(currentPrice, pair, 4)}`);
+      } else if (currentPrice < upAlarmPrice) {
+        upAlarmTriggered = false;
+        upBox.textContent = `Bekliyor (${formatMoney(upAlarmPrice, pair, 4)})`;
+        upBox.className = "info";
+      } else {
+        upBox.textContent = `ÇALDI (${formatMoney(currentPrice, pair, 4)})`;
+        upBox.className = "good";
+      }
+
+      if (!downAlarmPrice || downAlarmPrice <= 0) {
+        downAlarmTriggered = false;
+        downBox.textContent = "Kapalı";
+        downBox.className = "neutral";
+      } else if (currentPrice <= downAlarmPrice && !downAlarmTriggered) {
+        downAlarmTriggered = true;
+        downBox.textContent = `ÇALDI (${formatMoney(currentPrice, pair, 4)})`;
+        downBox.className = "bad";
+        notifyUser("Düşüş Alarmı", `${symbol} aşağı hedefe indi: ${formatMoney(currentPrice, pair, 4)}`);
+      } else if (currentPrice > downAlarmPrice) {
+        downAlarmTriggered = false;
+        downBox.textContent = `Bekliyor (${formatMoney(downAlarmPrice, pair, 4)})`;
+        downBox.className = "info";
+      } else {
+        downBox.textContent = `ÇALDI (${formatMoney(currentPrice, pair, 4)})`;
+        downBox.className = "bad";
+      }
+    }
+
+    function checkSignalAlert(symbol, decision) {
+      const signalBox = document.getElementById("signalAlertStatusBox");
+
+      if (!lastSignalDecision) {
+        lastSignalDecision = decision.decision;
+        signalBox.textContent = `İlk kayıt: ${decision.decision}`;
+        signalBox.className = "info";
         return;
       }
 
-      if (currentPrice >= alarmPrice && !alarmTriggered) {
-        alarmTriggered = true;
-        alarmStatusBox.textContent = `ÇALDI (${formatMoney(currentPrice, pair, 4)})`;
-        alarmStatusBox.className = "good";
-        notifyUser("Coin Alarmı", `${symbol} hedef fiyatı geçti: ${formatMoney(currentPrice, pair, 4)}`);
-      } else if (currentPrice < alarmPrice) {
-        alarmTriggered = false;
-        alarmStatusBox.textContent = `Bekliyor (${formatMoney(alarmPrice, pair, 4)})`;
-        alarmStatusBox.className = "info";
+      if (lastSignalDecision !== decision.decision) {
+        notifyUser("Sinyal Değişti", `${symbol} için yeni karar: ${decision.decision}`);
+        signalBox.textContent = `${lastSignalDecision} → ${decision.decision}`;
+        signalBox.className = decision.cls;
+        lastSignalDecision = decision.decision;
       } else {
-        alarmStatusBox.textContent = `ÇALDI (${formatMoney(currentPrice, pair, 4)})`;
-        alarmStatusBox.className = "good";
+        signalBox.textContent = `Değişmedi (${decision.decision})`;
+        signalBox.className = "neutral";
       }
     }
 
@@ -912,7 +972,8 @@
       const interval = document.getElementById("interval").value;
       const amount = Number(document.getElementById("amount").value || 0);
       const cost = Number(document.getElementById("cost").value || 0);
-      const alarmPrice = Number(document.getElementById("alarmPrice").value || 0);
+      const upAlarmPrice = Number(document.getElementById("upAlarmPrice").value || 0);
+      const downAlarmPrice = Number(document.getElementById("downAlarmPrice").value || 0);
       const symbol = coin + pair;
 
       const summaryBox = document.getElementById("summaryBox");
@@ -1017,7 +1078,8 @@
         setInlineText("targetDownBox", formatMoney(targetDown, pair, 4), "bad");
         setInlineText("rrBox", rrText, rrClass);
 
-        checkAlarm(price, alarmPrice, symbol, pair);
+        checkPriceAlerts(price, upAlarmPrice, downAlarmPrice, symbol, pair);
+        checkSignalAlert(symbol, decision);
 
         document.getElementById("updateTime").textContent =
           "Son güncelleme: " + new Date().toLocaleString("tr-TR");
