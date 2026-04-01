@@ -321,6 +321,52 @@
       border: 1px solid rgba(246,196,83,.25);
     }
 
+    details.toggle-box {
+      background: var(--card);
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      margin-top: 18px;
+      overflow: hidden;
+    }
+
+    details.toggle-box[open] {
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+
+    .toggle-title {
+      list-style: none;
+      cursor: pointer;
+      padding: 20px;
+      font-size: 22px;
+      font-weight: bold;
+      color: #f9fafb;
+      background: var(--card);
+      border-bottom: 1px solid transparent;
+    }
+
+    details.toggle-box[open] .toggle-title {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .toggle-title::-webkit-details-marker {
+      display: none;
+    }
+
+    .toggle-title::after {
+      content: "▼";
+      float: right;
+      color: var(--gold);
+      font-size: 16px;
+    }
+
+    details.toggle-box[open] .toggle-title::after {
+      content: "▲";
+    }
+
+    .toggle-content {
+      padding: 20px;
+    }
+
     @media (max-width: 950px) {
       .grid {
         grid-template-columns: 1fr 1fr;
@@ -421,17 +467,22 @@
       <div class="small-note" id="updateTime">-</div>
     </div>
 
-    <div class="card">
-      <div class="scanner-head">
-        <h2 class="section-title" style="margin-bottom:0;">En İyi 10 Alım Fırsatı</h2>
-        <button class="primary" style="flex:0;" onclick="scanTopCoins()">Taramayı Yenile</button>
+    <details class="toggle-box" id="scannerToggle">
+      <summary class="toggle-title">En İyi 10 Alım Fırsatı</summary>
+
+      <div class="toggle-content">
+        <div class="scanner-head">
+          <button class="primary" style="flex:0;" onclick="scanTopCoins()">Taramayı Yenile</button>
+        </div>
+
+        <div id="scannerSummary" class="scanner-summary">Tarama bekleniyor...</div>
+        <div id="scannerResults" class="scanner-grid"></div>
+
+        <div class="small-note">
+          Seçilen pariteye göre tarar. Hacmi güçlü coinler arasından RSI, EMA, trend ve risk/ödül yapısına göre puanlayıp en iyi 10 coin’i listeler.
+        </div>
       </div>
-      <div id="scannerSummary" class="scanner-summary">Tarama bekleniyor...</div>
-      <div id="scannerResults" class="scanner-grid"></div>
-      <div class="small-note">
-        Seçilen pariteye göre tarar. Hacmi güçlü coinler arasından RSI, EMA, trend ve risk/ödül yapısına göre puanlayıp en iyi 10 coin’i listeler.
-      </div>
-    </div>
+    </details>
 
     <div class="card">
       <h2 class="section-title">Grafik</h2>
