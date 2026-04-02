@@ -4,86 +4,289 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Altın & Gümüş Paneli</title>
+
   <style>
     * { box-sizing: border-box; }
-    :root {
-      --bg1:#07111f; --bg2:#0b1220; --card:#111827; --card2:#0f172a;
-      --line:rgba(255,255,255,0.06); --text:#fff; --muted:#94a3b8;
-      --gold:#f6c453; --silver:#cbd5e1; --good:#22c55e; --bad:#ef4444;
-      --neutral:#facc15; --info:#60a5fa;
-    }
-    body {
-      margin:0; font-family:Arial,sans-serif; color:var(--text);
-      background:linear-gradient(180deg,var(--bg1) 0%,var(--bg2) 100%);
-    }
-    .container { max-width:1180px; margin:auto; padding:20px; }
-    h1 { text-align:center; color:var(--gold); margin:0 0 8px; font-size:38px; }
-    .subtitle { text-align:center; color:var(--muted); margin-bottom:20px; font-size:15px; line-height:1.5; }
-    .card {
-      background:var(--card); border-radius:18px; padding:20px; margin-top:18px;
-      box-shadow:0 10px 30px rgba(0,0,0,.25); border:1px solid var(--line);
-    }
-    .section-title { font-size:22px; margin:0 0 14px; color:#f9fafb; }
-    .tab-row { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:16px; }
-    .tab-btn {
-      padding:14px 18px; border:none; border-radius:12px; font-weight:bold;
-      cursor:pointer; font-size:15px; background:#1f2937; color:white;
-    }
-    .tab-btn.active-gold { background:var(--gold); color:#111827; }
-    .tab-btn.active-silver { background:var(--silver); color:#111827; }
-    .grid { display:grid; grid-template-columns:repeat(5,1fr); gap:14px; }
-    .stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:14px; }
-    label { display:block; margin-bottom:8px; font-size:14px; color:#e5e7eb; font-weight:bold; }
-    input, select {
-      width:100%; padding:12px; border-radius:12px; border:none; background:#1f2937;
-      color:white; font-size:15px; outline:none;
-    }
-    .btn-row { display:flex; gap:12px; flex-wrap:wrap; margin-top:18px; }
-    button { padding:14px 18px; border:none; border-radius:12px; font-weight:bold; cursor:pointer; font-size:15px; }
-    .primary { background:var(--gold); color:#111827; flex:1; }
-    .ghost { background:#374151; color:white; }
-    .warn { background:#7c2d12; color:#fff; }
-    .summary {
-      margin-top:15px; padding:16px; background:#020617; border-radius:14px;
-      font-size:16px; line-height:1.75; border:1px solid var(--line);
-    }
-    .decision-banner {
-      margin-top:14px; border-radius:14px; padding:16px; font-weight:bold;
-      font-size:22px; text-align:center; border:1px solid var(--line);
-    }
-    .decision-good { background:rgba(34,197,94,.12); color:var(--good); }
-    .decision-bad { background:rgba(239,68,68,.12); color:var(--bad); }
-    .decision-neutral { background:rgba(250,204,21,.12); color:var(--neutral); }
-    .box { background:var(--card2); border-radius:14px; padding:14px; border:1px solid var(--line); }
-    .box-title { color:var(--muted); font-size:13px; margin-bottom:8px; }
-    .box-value { font-size:22px; font-weight:bold; word-break:break-word; }
-    .good { color:var(--good); } .bad { color:var(--bad); } .neutral { color:var(--neutral); } .info { color:var(--info); }
-    .row-list { display:grid; gap:10px; margin-top:10px; }
-    .row-item {
-      background:#0b1324; border-radius:12px; padding:12px 14px; display:flex;
-      justify-content:space-between; gap:12px; align-items:center; border:1px solid var(--line);
-    }
-    .row-item span:first-child { color:var(--muted); }
-    .row-item span:last-child { font-weight:bold; text-align:right; }
-    .chart-wrap {
-      background:#0b1324; border-radius:14px; overflow:hidden; border:1px solid var(--line);
-      min-height:520px;
-    }
-    #tvChart { width:100%; height:520px; }
-    .small-note { margin-top:14px; color:var(--muted); font-size:13px; line-height:1.6; }
 
-    @media (max-width:980px) {
-      .grid { grid-template-columns:1fr 1fr 1fr; }
-      .stats-grid { grid-template-columns:1fr 1fr; }
+    :root {
+      --bg1: #07111f;
+      --bg2: #0b1220;
+      --card: #111827;
+      --card2: #0f172a;
+      --line: rgba(255,255,255,0.06);
+      --text: #ffffff;
+      --muted: #94a3b8;
+      --gold: #f6c453;
+      --silver: #cbd5e1;
+      --good: #22c55e;
+      --bad: #ef4444;
+      --neutral: #facc15;
+      --info: #60a5fa;
     }
-    @media (max-width:640px) {
-      .grid, .stats-grid { grid-template-columns:1fr; }
-      .row-item { flex-direction:column; align-items:flex-start; }
-      .row-item span:last-child { text-align:left; }
-      h1 { font-size:30px; }
-      .decision-banner { font-size:18px; }
-      #tvChart { height:420px; }
-      .chart-wrap { min-height:420px; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(180deg, var(--bg1) 0%, var(--bg2) 100%);
+      color: var(--text);
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--gold);
+      margin: 0 0 8px;
+      font-size: 38px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: var(--muted);
+      margin-bottom: 20px;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 18px;
+      padding: 20px;
+      margin-top: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      border: 1px solid var(--line);
+    }
+
+    .section-title {
+      font-size: 22px;
+      margin: 0 0 14px;
+      color: #f9fafb;
+    }
+
+    .tab-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .tab-btn {
+      padding: 14px 18px;
+      border: none;
+      border-radius: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 15px;
+      background: #1f2937;
+      color: white;
+    }
+
+    .tab-btn.active-gold {
+      background: var(--gold);
+      color: #111827;
+    }
+
+    .tab-btn.active-silver {
+      background: var(--silver);
+      color: #111827;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: #e5e7eb;
+      font-weight: bold;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: none;
+      background: #1f2937;
+      color: white;
+      font-size: 15px;
+      outline: none;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    button {
+      padding: 14px 18px;
+      border: none;
+      border-radius: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    .primary {
+      background: var(--gold);
+      color: #111827;
+      flex: 1;
+    }
+
+    .ghost {
+      background: #374151;
+      color: white;
+    }
+
+    .warn {
+      background: #7c2d12;
+      color: #fff;
+    }
+
+    .summary {
+      margin-top: 15px;
+      padding: 16px;
+      background: #020617;
+      border-radius: 14px;
+      font-size: 16px;
+      line-height: 1.75;
+      border: 1px solid var(--line);
+    }
+
+    .decision-banner {
+      margin-top: 14px;
+      border-radius: 14px;
+      padding: 16px;
+      font-weight: bold;
+      font-size: 22px;
+      text-align: center;
+      border: 1px solid var(--line);
+    }
+
+    .decision-good {
+      background: rgba(34, 197, 94, 0.12);
+      color: var(--good);
+    }
+
+    .decision-bad {
+      background: rgba(239, 68, 68, 0.12);
+      color: var(--bad);
+    }
+
+    .decision-neutral {
+      background: rgba(250, 204, 21, 0.12);
+      color: var(--neutral);
+    }
+
+    .box {
+      background: var(--card2);
+      border-radius: 14px;
+      padding: 14px;
+      border: 1px solid var(--line);
+    }
+
+    .box-title {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .box-value {
+      font-size: 22px;
+      font-weight: bold;
+      word-break: break-word;
+    }
+
+    .good { color: var(--good); }
+    .bad { color: var(--bad); }
+    .neutral { color: var(--neutral); }
+    .info { color: var(--info); }
+
+    .row-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .row-item {
+      background: #0b1324;
+      border-radius: 12px;
+      padding: 12px 14px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      border: 1px solid var(--line);
+    }
+
+    .row-item span:first-child {
+      color: var(--muted);
+    }
+
+    .row-item span:last-child {
+      font-weight: bold;
+      text-align: right;
+    }
+
+    .chart-wrap {
+      background: #0b1324;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      min-height: 520px;
+    }
+
+    #tvChart {
+      width: 100%;
+      height: 520px;
+    }
+
+    .small-note {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 980px) {
+      .grid { grid-template-columns: 1fr 1fr 1fr; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      .grid, .stats-grid { grid-template-columns: 1fr; }
+
+      .row-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .row-item span:last-child {
+        text-align: left;
+      }
+
+      h1 { font-size: 30px; }
+
+      .decision-banner { font-size: 18px; }
+
+      #tvChart { height: 420px; }
+      .chart-wrap { min-height: 420px; }
     }
   </style>
 </head>
@@ -104,6 +307,7 @@
           <label for="amount">Miktar</label>
           <input id="amount" type="number" step="0.0001" value="1" />
         </div>
+
         <div>
           <label for="unit">Birim</label>
           <select id="unit">
@@ -111,17 +315,20 @@
             <option value="ounce">Ons</option>
           </select>
         </div>
+
         <div>
           <label for="upAlarmPrice">Yukarı Alarm (TL)</label>
           <input id="upAlarmPrice" type="number" step="0.0001" value="0" />
         </div>
+
         <div>
           <label for="downAlarmPrice">Aşağı Alarm (TL)</label>
           <input id="downAlarmPrice" type="number" step="0.0001" value="0" />
         </div>
+
         <div>
-          <label for="dummy">İşlem</label>
-          <button class="primary" onclick="analyze()">Yenile</button>
+          <label for="dummyBtn">İşlem</label>
+          <button id="dummyBtn" class="primary" onclick="analyze()">Yenile</button>
         </div>
       </div>
 
@@ -143,16 +350,23 @@
         <div class="box"><div class="box-title">USD/TRY</div><div class="box-value" id="usdTryBox">-</div></div>
         <div class="box"><div class="box-title">Gram Fiyatı (TL)</div><div class="box-value" id="gramTryBox">-</div></div>
         <div class="box"><div class="box-title">Seçili Birim Toplamı</div><div class="box-value" id="selectedUnitBox">-</div></div>
+
         <div class="box"><div class="box-title">Çeyrek</div><div class="box-value" id="quarterBox">-</div></div>
         <div class="box"><div class="box-title">Yarım</div><div class="box-value" id="halfBox">-</div></div>
         <div class="box"><div class="box-title">Tam</div><div class="box-value" id="fullBox">-</div></div>
         <div class="box"><div class="box-title">Cumhuriyet</div><div class="box-value" id="cumhuriyetBox">-</div></div>
       </div>
+
+      <div class="small-note">
+        Altın tarafındaki çeyrek, yarım, tam ve cumhuriyet hesapları yaklaşık gram karşılığıyla türetilir.
+      </div>
     </div>
 
     <div class="card">
       <h2 class="section-title">Grafik</h2>
-      <div class="chart-wrap"><div id="tvChart"></div></div>
+      <div class="chart-wrap">
+        <div id="tvChart"></div>
+      </div>
     </div>
 
     <div class="card">
@@ -170,13 +384,13 @@
       </div>
 
       <div class="small-note">
-        Bu sürüm önce çalışsın diye sade tutuldu. Sonra üstüne RSI/EMA katmanı ekleriz.
+        Bu sürüm önce sağlam çalışsın diye sade tutuldu. Sonra üstüne daha gelişmiş analiz ekleriz.
       </div>
     </div>
   </div>
 
   <script>
-    const STORAGE_KEY = "metals_panel_v2";
+    const STORAGE_KEY = "metals_panel_v3";
     const TROY_OUNCE_TO_GRAMS = 31.1034768;
     const COIN_EQUIVALENTS = {
       quarter: 1.754,
@@ -208,7 +422,9 @@
         return;
       }
       const result = await Notification.requestPermission();
-      if (result === "granted") alert("Bildirim izni verildi.");
+      if (result === "granted") {
+        alert("Bildirim izni verildi.");
+      }
     }
 
     function notifyUser(title, body) {
@@ -218,8 +434,13 @@
 
     function switchAsset(asset) {
       currentAsset = asset;
-      document.getElementById("goldTab").className = asset === "gold" ? "tab-btn active-gold" : "tab-btn";
-      document.getElementById("silverTab").className = asset === "silver" ? "tab-btn active-silver" : "tab-btn";
+
+      document.getElementById("goldTab").className =
+        asset === "gold" ? "tab-btn active-gold" : "tab-btn";
+
+      document.getElementById("silverTab").className =
+        asset === "silver" ? "tab-btn active-silver" : "tab-btn";
+
       analyze();
     }
 
@@ -237,8 +458,11 @@
 
     function loadSavedData(showMessage = false) {
       const raw = localStorage.getItem(STORAGE_KEY);
+
       if (!raw) {
-        if (showMessage) alert("Kayıtlı veri bulunamadı.");
+        if (showMessage) {
+          alert("Kayıtlı veri bulunamadı.");
+        }
         return false;
       }
 
@@ -252,22 +476,18 @@
         switchAsset(currentAsset);
         return true;
       } catch {
-        if (showMessage) alert("Kayıt okunamadı.");
+        if (showMessage) {
+          alert("Kayıt okunamadı.");
+        }
         return false;
       }
     }
-async function fetchSpot(symbol) {
-  const res = await fetch("https://api.metals.live/v1/spot");
-  const data = await res.json();
 
-  if (symbol === "XAU") {
-    const gold = data.find(x => x.gold);
-    return { price: gold.gold };
-  } else {
-    const silver = data.find(x => x.silver);
-    return { price: silver.silver };
-  }
-}
+    async function fetchSpot(symbol) {
+      const res = await fetch(`https://gold-api.com/price/${symbol}`);
+      if (!res.ok) throw new Error("Spot veri alınamadı");
+      return await res.json();
+    }
 
     async function fetchUsdTry() {
       const res = await fetch("https://open.er-api.com/v6/latest/USD");
@@ -325,12 +545,12 @@ async function fetchSpot(symbol) {
         upBox.className = "box-value neutral";
       } else if (currentTlPrice >= upAlarmPrice && !upAlarmTriggered) {
         upAlarmTriggered = true;
-        upBox.textContent = `ÇALDI`;
+        upBox.textContent = "ÇALDI";
         upBox.className = "box-value good";
         notifyUser(`${assetName} Yukarı Alarm`, `${assetName} hedef fiyatı geçti: ${formatMoney(currentTlPrice, "TL", 2)}`);
       } else if (currentTlPrice < upAlarmPrice) {
         upAlarmTriggered = false;
-        upBox.textContent = `Bekliyor`;
+        upBox.textContent = "Bekliyor";
         upBox.className = "box-value info";
       }
 
@@ -340,12 +560,12 @@ async function fetchSpot(symbol) {
         downBox.className = "box-value neutral";
       } else if (currentTlPrice <= downAlarmPrice && !downAlarmTriggered) {
         downAlarmTriggered = true;
-        downBox.textContent = `ÇALDI`;
+        downBox.textContent = "ÇALDI";
         downBox.className = "box-value bad";
         notifyUser(`${assetName} Düşüş Alarmı`, `${assetName} alarma indi: ${formatMoney(currentTlPrice, "TL", 2)}`);
       } else if (currentTlPrice > downAlarmPrice) {
         downAlarmTriggered = false;
-        downBox.textContent = `Bekliyor`;
+        downBox.textContent = "Bekliyor";
         downBox.className = "box-value info";
       }
     }
@@ -358,6 +578,7 @@ async function fetchSpot(symbol) {
 
       const summaryBox = document.getElementById("summaryBox");
       const banner = document.getElementById("decisionBanner");
+
       summaryBox.textContent = "Veri alınıyor...";
       banner.textContent = "HESAPLANIYOR";
       banner.className = "decision-banner decision-neutral";
@@ -377,20 +598,10 @@ async function fetchSpot(symbol) {
         const selectedUnitPrice = unit === "gram" ? gramTry : ounceTry;
         const totalValue = selectedUnitPrice * amount;
 
-        let trend = "Kararsız";
-        let signal = "BEKLE";
-        let signalClass = "neutral";
-        let reason = "Canlı fiyat alındı. Teknik katman sade tutuldu.";
-
-        if (currentAsset === "gold") {
-          trend = "Takip";
-          signal = "ALTIN İZLE";
-          signalClass = "good";
-        } else {
-          trend = "Takip";
-          signal = "GÜMÜŞ İZLE";
-          signalClass = "info";
-        }
+        let trend = "Takip";
+        let signal = currentAsset === "gold" ? "ALTIN İZLE" : "GÜMÜŞ İZLE";
+        let signalClass = currentAsset === "gold" ? "good" : "info";
+        let reason = "Canlı fiyat alındı. Bu sürüm sade piyasa panelidir.";
 
         banner.textContent = signal;
         banner.className = `decision-banner ${signalClass === "good" ? "decision-good" : signalClass === "bad" ? "decision-bad" : "decision-neutral"}`;
@@ -421,14 +632,18 @@ async function fetchSpot(symbol) {
         document.getElementById("trendBox").textContent = trend;
         document.getElementById("trendBox").className = `box-value ${signalClass}`;
         document.getElementById("signalBox").textContent = signal;
-        document.getElementById("signalBox").className = signalClass;
+        document.getElementById("signalBox").className = `box-value ${signalClass}`;
         document.getElementById("reasonBox").textContent = reason;
         document.getElementById("reasonBox").className = "info";
-        document.getElementById("referenceBox").textContent = unit === "gram"
-          ? formatMoney(gramTry, "TL", 2)
-          : formatMoney(ounceTry, "TL", 2);
+        document.getElementById("referenceBox").textContent =
+          unit === "gram" ? formatMoney(gramTry, "TL", 2) : formatMoney(ounceTry, "TL", 2);
 
-        checkPriceAlerts(unit === "gram" ? gramTry : ounceTry, upAlarmPrice, downAlarmPrice, assetLabel);
+        checkPriceAlerts(
+          unit === "gram" ? gramTry : ounceTry,
+          upAlarmPrice,
+          downAlarmPrice,
+          assetLabel
+        );
 
         document.getElementById("updateTime").textContent =
           "Son güncelleme: " + new Date().toLocaleString("tr-TR");
